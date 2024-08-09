@@ -12,16 +12,46 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "y"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "park"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "package": "com.syed_maaz_ali.park",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDQDUyn3laOLwAZJCwKtxuOnBlQY_5QXi4"
+        }
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "park",
+    "extra": {
+      "eas": {
+        "projectId": "dae466ac-5071-4eee-8860-f67a32fa7f17"
+      }
     }
   }
 }
