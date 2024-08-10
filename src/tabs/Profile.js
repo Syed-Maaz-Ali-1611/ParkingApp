@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Modal, TextInput, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -35,13 +35,13 @@ const Profile = () => {
         }
         const data = await response.json();
         setProfilePic(data.profilePic ? `https://parking-api-alpha.vercel.app/${data.profilePic.replace(/\\/g, '/')}` : null);
-        setName(data.name);
-        setAge(data.age.toString());
-        setEmail(data.email);
-        setVehicle(data.vehicle);
-        setModel(data.model);
-        setLicensePlate(data.licensePlate);
-        setOwner(data.owner);
+        setName(data.name || '');
+        setAge(data.age ? data.age.toString() : '');
+        setEmail(data.email || '');
+        setVehicle(data.vehicle || '');
+        setModel(data.model || '');
+        setLicensePlate(data.licensePlate || '');
+        setOwner(data.owner || '');
       } catch (error) {
         console.error('Error:', error);
         Alert.alert('Error', error.message || 'Something went wrong. Please try again later.');
@@ -70,7 +70,7 @@ const Profile = () => {
     formData.append('model', model);
     formData.append('licensePlate', licensePlate);
     formData.append('owner', owner);
-
+  
     if (profilePic) {
       const fileName = profilePic.split('/').pop();
       const fileType = profilePic.split('.').pop();
@@ -79,13 +79,8 @@ const Profile = () => {
         name: fileName,
         type: `image/${fileType}`,
       });
-      console.log('Profile pic appended:', {
-        uri: profilePic,
-        name: fileName,
-        type: `image/${fileType}`,
-      });
     }
-
+  
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
@@ -98,12 +93,12 @@ const Profile = () => {
         },
         body: formData,
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(errorText);
       }
-
+  
       const data = await response.json();
       Alert.alert('Success', 'Profile updated successfully');
       setModalVisible(false);
@@ -137,7 +132,7 @@ const Profile = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.profileContainer}>
         <TouchableOpacity onPress={pickImage}>
           <View style={styles.photoPlaceholder}>
@@ -235,20 +230,19 @@ const Profile = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
   },
   profileContainer: {
     width: '100%',
-    height: 500,
     padding: 16,
     borderRadius: 10,
     backgroundColor: '#cccefc',
